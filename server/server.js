@@ -86,5 +86,5 @@ router.notFound(function(req, res) {
 });
 
 var port = parseInt(process.argv[2], 10) || 3000
-http.createServer(router).listen(port, "127.0.0.1");
-sys.puts('server running at http://127.0.0.1:' + port);
+http.createServer(router).listen(port);
+sys.puts('server running at port ' + port);
