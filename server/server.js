@@ -14,8 +14,9 @@ var sys = require('sys'),
     flickr = require('./flickr'),
     utils = require('./utils'),
     router = require('choreographer').router();
+    config = require('./config').config;
 
-var API_KEY = 'xxx_flickr_api_key_xxxx';
+var API_KEY = config.flickr_api_key;
 
 router.get('/search/*', function(req, res, term) {
 
@@ -84,5 +85,6 @@ router.notFound(function(req, res) {
   utils.log( req, 'not found' );
 });
 
-http.createServer(router).listen(3000, "127.0.0.1");
-sys.puts('server running at http://127.0.0.1:3000');
+var port = parseInt(process.argv[2], 10) || 3000
+http.createServer(router).listen(port, "127.0.0.1");
+sys.puts('server running at http://127.0.0.1:' + port);

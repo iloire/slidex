@@ -1,0 +1,1 @@
+exports.config={flickr_api_key:'your_api_here'}
