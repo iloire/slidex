@@ -12,6 +12,9 @@ App = {
 	Views: {},
 	Models: {},
 	Routers: {},
-	
+
 	GalleryView: null
 };
+
+App.config = {};
+App.config.photoset_id = '72157610803960909';

@@ -6,11 +6,9 @@
  * Dual licensed under the MIT and GPL licenses.
  */
 
-
 var http = require('http'),
     sys = require('sys'),
     utils = require('./utils');
-
 
 var Flickr = module.exports = exports = function Flickr(api_key) {
   if (!api_key) throw Error("api_key required");
@@ -20,14 +18,12 @@ var Flickr = module.exports = exports = function Flickr(api_key) {
   this.per_page = 25;
 };
 
-
 exports.createFlickr = function( api_key ) {
   return new Flickr( api_key );
 };
 
 Flickr.prototype._request = function(method, args, callback) {
-
-  // aggregate all params  
+  // aggregate all params
   var defaults = {
     method: method,
     format: 'json',
@@ -48,31 +44,28 @@ Flickr.prototype._request = function(method, args, callback) {
 
   var headers = {
     'accept' : '*/*',
-    'host' : this.host,
+    'host' : this.host
   };
 
   // call api.flickr.com
   var req = http.createClient( this.port, this.host ).request( 'POST', url, headers );
   req.addListener('response', function(response) {
-    
+
     var body = '';
     response.setEncoding('utf8');
-    
-    response.on('data', function(chunk) { 
 
+    response.on('data', function(chunk) {
       if (response.statusCode != 200) {
         callback( {stat: 'error', code: response.statusCode, message: 'response_on_data error'} );
         req.abort();
       } else {
         body += chunk;
       }
-
     });
 
     response.on('end', function() {
-
       var data = JSON.parse(body);
-      if ( data.stat && data.stat == 'ok' ) {
+      if ( data.stat && data.stat === 'ok' ) {
         // strip out stat
         for (var key in data) {
           if (key !== 'stat') {
@@ -83,7 +76,6 @@ Flickr.prototype._request = function(method, args, callback) {
       } else {
         callback( {stat: 'error', code: data.code, message: data.message} );
       }
-
     });
 
   });
@@ -94,38 +86,46 @@ Flickr.prototype._request = function(method, args, callback) {
 
 
 Flickr.prototype.search = function(term, args, callback) {
-  
-  var args = args || {};
+  args = args || {};
   var defaults = { privacy_filter:1, per_page:this.per_page, extras:'description,owner_name,url_m', text:term };
-
   var req = this._request(
-      'flickr.photos.search', 
-      utils.merge( defaults, args ), 
+      'flickr.photos.search',
+      utils.merge( defaults, args ),
       callback);
 };
 
 
+Flickr.prototype.photoset = function(date, args, callback) {
+  var defaults = { date: date, per_page:this.per_page, extras:'owner_name,url_m' };
+  //args.photoset_id = '72157610803960909';
+  var req = this._request(
+      'flickr.photosets.getPhotos',
+      utils.merge( defaults, args ),
+      callback);
+};
+
+Flickr.prototype.mypictures = function(date, args, callback) {
+  var defaults = { date: date, per_page:this.per_page, extras:'owner_name,url_m' };
+  //args.user_id = '62516217@N00';
+  var req = this._request(
+      'flickr.people.getPublicPhotos',
+      utils.merge( defaults, args ),
+      callback);
+};
 
 
 Flickr.prototype.interestingness = function(date, args, callback) {
-
   var defaults = { date: date, per_page:this.per_page, extras:'owner_name,url_m' };
-
   var req = this._request(
-      'flickr.interestingness.getList', 
+      'flickr.interestingness.getList',
       utils.merge( defaults, args ),
       callback);
-  
 };
 
-
-
 Flickr.prototype.getInfo = function(photo_id, secret, callback) {
-  
   var args = { photo_id: photo_id, secret: secret };
-
   var req = this._request(
-      'flickr.photos.getInfo', 
-      args, 
+      'flickr.photos.getInfo',
+      args,
       callback);
 };

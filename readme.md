@@ -1,7 +1,12 @@
+# 2earth.org
 
-# SlideX 
+Places and faces around the world.
 
- Slidex is a Flickr + Backbone.js + Node.js example app.  This app accompanies my blog entry at [mobile.rdacorp.com](http://mobile.rdacorp.com/2011/10/flickr-backbonejs-nodejs.html).
+![Home](https://github.com/iloire/slidex/raw/master/screenshots/home_01.png)
+![Detail](https://github.com/iloire/slidex/raw/master/screenshots/details_01.png)
 
- You can view the example app [here](http://slidex.crux.io).
-  
+## Based on Slidex
+
+You can check the original project  [here](https://github.com/grumpycola/slidex).
+You can view the original app demo [here](http://slidex.crux.io).
+

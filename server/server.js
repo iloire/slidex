@@ -6,7 +6,6 @@
  * Dual licensed under the MIT and GPL licenses.
  */
 
-
 var sys = require('sys'),
     http = require('http'),
     url = require('url'),
@@ -18,66 +17,73 @@ var sys = require('sys'),
 
 var API_KEY = config.flickr_api_key;
 
-router.get('/search/*', function(req, res, term) {
+function process_result (res, error, result){
+  if (error) {
+    res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+    res.end( JSON.stringify(error) );
+  } else if (result) {
+    res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
+    res.end( JSON.stringify(result) );
+  }
+}
 
-  utils.log( req, '/search' );
+router.get('/search/*', function(req, res, term) {
+  //utils.log( req, '/search' );
 
   // parse url into its component
   var obj = url.parse( req.url );
   var args = qs.parse( obj.query ) || {};
 
   var f = flickr.createFlickr( API_KEY );
-  f.search(term, args, function(error, result) {
-
-    if (error) {
-
-      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-      res.end( JSON.stringify(error) );
-      
-    } else if (result) {
-
-      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-      res.end( JSON.stringify(result) );
-
-    }
-
+  f.search(term, args, function(error, result){
+    process_result(res, error, result);
   });
-  
 });
 
 router.get('/interesting/*', function(req, res, date) {
-
-  utils.log( req, '/interesting' );
+  //utils.log( req, '/interesting' );
 
   // parse url into its component
   var obj = url.parse( req.url );
   var args = qs.parse( obj.query ) || {};
 
   var f = flickr.createFlickr( API_KEY );
-  f.interestingness(date, args, function(error, result) {
-
-    if (error) {
-
-      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-      res.end( JSON.stringify(error) );
-      
-    } else if (result) {
-
-      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
-      res.end( JSON.stringify(result) );
-
-    }
-
-  });  
-
+  f.interestingness(date, args, function(error, result){
+    process_result(res, error, result);
+  });
 });
 
+router.get('/mypictures', function(req, res, date) {
+  //utils.log( req, '/mypictures' );
+
+  // parse url into its component
+  var obj = url.parse( req.url );
+  var args = qs.parse( obj.query ) || {};
+
+  var f = flickr.createFlickr( API_KEY );
+  f.mypictures(date, args, function(error, result){
+    process_result(res, error, result);
+  });
+});
+
+router.get('/photoset', function(req, res, date) {
+  //utils.log( req, '/photoset' );
+
+  // parse url into its component
+  var obj = url.parse( req.url );
+  var args = qs.parse( obj.query ) || {};
+
+  var f = flickr.createFlickr( API_KEY );
+  f.photoset(date, args, function(error, result){
+    process_result(res, error, result);
+  });
+
+});
 
 router.get('/favicon.ico', function(req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('\n');
 });
-
 
 router.notFound(function(req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
@@ -85,6 +91,6 @@ router.notFound(function(req, res) {
   utils.log( req, 'not found' );
 });
 
-var port = parseInt(process.argv[2], 10) || 3000
+var port = parseInt(process.argv[2], 10) || 3000;
 http.createServer(router).listen(port);
 sys.puts('server running at port ' + port);
