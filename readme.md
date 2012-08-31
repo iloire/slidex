@@ -1,9 +1,6 @@
 # 2earth.org
 
-Places and faces around the world.
-
-## Online:
-[2earth.org](http://www.2earth.org/)
+[2earth.org](http://www.2earth.org/). Places and faces around the world.
 
 ![Home](https://github.com/iloire/slidex/raw/master/screenshots/home_01.png)
 ![Detail](https://github.com/iloire/slidex/raw/master/screenshots/details_01.png)
