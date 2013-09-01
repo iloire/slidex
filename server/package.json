@@ -1,0 +1,19 @@
+{
+  "name": "slidex-2earth.org",
+  "version": "0.0.0",
+  "description": "Slidex server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": "",
+  "keywords": [
+    "slidex"
+  ],
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "choreographer": "~0.3.0"
+  }
+}
