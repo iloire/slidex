@@ -19,6 +19,7 @@ var API_KEY = config.flickr_api_key;
 
 function process_result (res, error, result){
   if (error) {
+    console.error(error);
     res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin' : '*'});
     res.end( JSON.stringify(error) );
   } else if (result) {

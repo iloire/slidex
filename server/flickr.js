@@ -38,9 +38,8 @@ Flickr.prototype._request = function(method, args, callback) {
     params.push( key + "=" + args[key] );
   }
 
-  // set the url
-  var url = "http://" + this.host + "/services/rest/?" + params.join('&');
-  //sys.puts( url );
+  var url = "/services/rest/?" + params.join('&');
+//  sys.puts( url );
 
   var headers = {
     'accept' : '*/*',
@@ -48,7 +47,7 @@ Flickr.prototype._request = function(method, args, callback) {
   };
 
   // call api.flickr.com
-  var req = http.createClient( this.port, this.host ).request( 'POST', url, headers );
+  var req = http.request({ port:this.port, host: this.host, path: url, headers: headers }); //request( 'GET', url, headers );
   req.addListener('response', function(response) {
 
     var body = '';
@@ -64,7 +63,15 @@ Flickr.prototype._request = function(method, args, callback) {
     });
 
     response.on('end', function() {
-      var data = JSON.parse(body);
+      var data;
+      try {
+        data = JSON.parse(body);
+      }
+      catch(e){
+        console.error(e);
+        console.log(body);
+        return callback(e);
+      }
       if ( data.stat && data.stat === 'ok' ) {
         // strip out stat
         for (var key in data) {
