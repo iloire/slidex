@@ -25,8 +25,13 @@ require([
   	require.ready(function() {	
 		new App.Routers.Main();
 		App.GalleryView = new App.Views.GalleryView();
-		Backbone.history.start();            	
-    });	
+		Backbone.history.start();
+
+		$('.content a.pirobox').live('click', function(e){
+			var title = $(this).attr('title');
+			_gaq.push(['_trackEvent', 'Photos', 'click', title]);
+		});
+    });
 });
 
 
