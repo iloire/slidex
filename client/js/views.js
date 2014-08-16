@@ -254,9 +254,10 @@ App.Views.GalleryView = Backbone.View.extend({
 
     // get the list of photos, load them up, arrange it into masonry
     var els = [];
-    var coll = self.model.get('photo');
-    if (coll) {
-      coll.forEach( function(item) {
+    var photoset = self.model.get('photoset');
+    if (photoset) {
+      var photos  = photoset.photo;
+      photos.forEach( function(item) {
         var photo = new App.Models.Photo(item);
         els.push( photo.view.render().el );
       });
@@ -311,7 +312,6 @@ App.Views.GalleryView = Backbone.View.extend({
   },
 
   fetch: function( term, options ) {
-
     // hide loading screen for mobile devices, as the viewport is mostly invisible to user
     if (!isMobile()) {
       this.loading.show();

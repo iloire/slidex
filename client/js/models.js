@@ -72,8 +72,13 @@ App.Models.Gallery = Backbone.Model.extend({
     this.sort = sort;
 
     this.fetch({
-      success: function() { callback(); },
-      error: function() { callback(); }
+      success: function() { 
+        callback(); 
+      },
+      error: function() { 
+        console.log('Error fetching data from slidex server');
+        callback(); 
+      }
     });
   }
 });
