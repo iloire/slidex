@@ -9,5 +9,10 @@
 
 You can check the original project  [here](https://github.com/grumpycola/slidex).
 
-You can view the original app demo [here](http://slidex.crux.io).
+## Install
 
+1) ```cd server```
+
+2) ```npm install```
+
+3) run client with nginx
