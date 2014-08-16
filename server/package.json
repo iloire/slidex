@@ -14,7 +14,7 @@
   "author": "",
   "license": "BSD",
   "dependencies": {
-    "choreographer": "~0.3.0",
-    "request": "^2.40.0"
+    "choreographer": "0.3.0",
+    "request": "2.40.0"
   }
 }
