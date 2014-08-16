@@ -6,15 +6,14 @@
  * Dual licensed under the MIT and GPL licenses.
  */
 
-var http = require('http'),
+var request = require('request'),
     sys = require('sys'),
     utils = require('./utils');
 
 var Flickr = module.exports = exports = function Flickr(api_key) {
   if (!api_key) throw Error("api_key required");
   this.api_key = api_key;
-  this.host = 'api.flickr.com';
-  this.port = 80;
+  this.host = 'https://api.flickr.com';
   this.per_page = 25;
 };
 
@@ -38,55 +37,22 @@ Flickr.prototype._request = function(method, args, callback) {
     params.push( key + "=" + args[key] );
   }
 
-  var url = "/services/rest/?" + params.join('&');
-//  sys.puts( url );
-
-  var headers = {
-    'accept' : '*/*',
-    'host' : this.host
-  };
+  var url = this.host + "/services/rest/?" + params.join('&');
 
   // call api.flickr.com
-  var req = http.request({ port:this.port, host: this.host, path: url, headers: headers }); //request( 'GET', url, headers );
-  req.addListener('response', function(response) {
-
-    var body = '';
-    response.setEncoding('utf8');
-
-    response.on('data', function(chunk) {
-      if (response.statusCode != 200) {
-        callback( {stat: 'error', code: response.statusCode, message: 'response_on_data error'} );
-        req.abort();
-      } else {
-        body += chunk;
-      }
-    });
-
-    response.on('end', function() {
-      var data;
-      try {
-        data = JSON.parse(body);
-      }
-      catch(e){
-        console.error(e);
-        console.log(body);
-        return callback(e);
-      }
-      if ( data.stat && data.stat === 'ok' ) {
-        // strip out stat
-        for (var key in data) {
-          if (key !== 'stat') {
-            data = data[key];
-          }
-        }
+  request(url, function(error, response, body){
+    if (error){
+      callback( {stat: 'error', code: 500, message: 'error on request:' + error } );      
+    } else {
+      data = JSON.parse(body);
+      if (data.stat === 'ok') {
         callback( null, data );
-      } else {
+      }
+      else {
         callback( {stat: 'error', code: data.code, message: data.message} );
       }
-    });
-
-  });
-  req.end();
+    }
+  });  
 };
 
 
